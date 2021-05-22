@@ -1,0 +1,10 @@
+*.bin
+*.elf
+*.o
+
+CMakeLists.txt
+cmake-build-debug/*
+Main.iml
+misc.xml
+modules.xml
+vcs.xml
