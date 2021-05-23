@@ -1,4 +1,4 @@
 [bits 32]
-[extern main] ; defines calling point
-call main
+[extern kernel_main] ; defines calling point
+call kernel_main
 jmp $

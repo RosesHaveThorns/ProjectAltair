@@ -1,7 +1,6 @@
 // PROJECT ALTAIR
 // Created by Rose Awen Brindle on 23/05/2021.
 //
-// Contains functions for reading and writing from/to ports
 
 // !!! Inline ASM has src and dest params backwards to NASM () !!!
 
@@ -14,7 +13,7 @@ unsigned char port_read_byte (unsigned short port){
 }
 
 void port_write_byte (unsigned short port, unsigned char data) {
-  __asm__("out %%al, %%dx" : : "a" (data), "d" (port))
+  __asm__("out %%al, %%dx" : : "a" (data), "d" (port));
 }
 
 unsigned short port_read_word (unsigned short port) {
@@ -24,5 +23,5 @@ unsigned short port_read_word (unsigned short port) {
 }
 
 void port_write_word (unsigned short port, unsigned short data) {
-  __asm__("out %%ax, %%dx" : : "a" (data), "d" (port))
+  __asm__("out %%ax, %%dx" : : "a" (data), "d" (port));
 }

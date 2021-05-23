@@ -2,8 +2,8 @@
 # $< = first dependency
 # $^ = all dependencies
 
-C_SOURCES = $(wildcard kernel/*.c)
-HEADERS = $(wildcard kernel/*.h)
+C_SOURCES = $(wildcard kernel/*.c drivers/*.c)
+HEADERS = $(wildcard kernel/*.h drivers/*.h)
 
 OBJ = ${C_SOURCES:.c=.o}
 
@@ -34,7 +34,7 @@ debug : os-image.bin kernel.elf
 
 # Wildcard rules
 %.o : %.c ${HEADERS}
-	${CC} ${CFLAGS} -ffreestanding -c $< -o $@
+	${CC} ${CFLAGS} -ffreestanding -std=c99 -c $< -o $@
 
 %.o : %.asm
 	nasm $< -f elf -o $@
