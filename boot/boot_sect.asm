@@ -18,11 +18,11 @@ KERNEL_OFFSET equ 0x1000 ; must be the same as used when linking kernel
 
   
 ; includes
-%include "print.asm"
-%include "32bit_print.asm"
-%include "disk.asm"
-%include "32bit_gdt.asm"
-%include "32bit_switch_prot.asm"
+%include "boot/print.asm"
+%include "boot/32bit_print.asm"
+%include "boot/disk.asm"
+%include "boot/32bit_gdt.asm"
+%include "boot/32bit_switch_prot.asm"
     
 
 ; load kernel from disk
