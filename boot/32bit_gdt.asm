@@ -1,5 +1,5 @@
 gdt_start:
-    dd 0x0
+    dd 0x0 ; null segment
     dd 0x0
     
 ; code segment GDT
@@ -29,4 +29,5 @@ gdt_descriptor:
     
 ; constants
 CODE_SEG equ gdt_code - gdt_start
-DATA_SEG equ gdt_data - gdt_start 
+DATA_SEG equ gdt_data - gdt_start
+

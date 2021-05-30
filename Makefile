@@ -2,17 +2,17 @@
 # $< = first dependency
 # $^ = all dependencies
 
-C_SOURCES = $(wildcard kernel/*.c drivers/*.c)
-HEADERS = $(wildcard kernel/*.h drivers/*.h)
+C_SOURCES = $(wildcard kernel/*.c drivers/*.c intrpt/*.c)
+HEADERS = $(wildcard kernel/*.h drivers/*.h intrpt/*.h)
 
-OBJ = ${C_SOURCES:.c=.o}
+OBJ = ${C_SOURCES:.c=.o intrpt/interrupt.o}
 
 # Change this if your cross-compiler is somewhere else
 CC = /usr/local/i386elfgcc/bin/i386-elf-gcc
 GDB = /usr/bin/gdb
 QEMU = /usr/bin/qemu-system-x86_64
 
-CFLAGS = -g
+CFLAGS = -g -ffreestanding
 
 # Main rules
 os-image.bin : boot/boot_sect.bin kernel.bin
@@ -30,11 +30,11 @@ kernel.elf : boot/kernel_entry.o ${OBJ}
 
 debug : os-image.bin kernel.elf
 	${QEMU} -s -fda os-image.bin &
-	${GDB} -ex "target remote localhost:1234" -ex "symbol-file kernel.elf"
+	${GDB} -ix=/home/rose/.gdbinit -ex "target remote localhost:1234" -ex "symbol-file kernel.elf"
 
 # Wildcard rules
 %.o : %.c ${HEADERS}
-	${CC} ${CFLAGS} -ffreestanding -std=c99 -c $< -o $@
+	${CC} ${CFLAGS} -std=c99 -c $< -o $@
 
 %.o : %.asm
 	nasm $< -f elf -o $@
@@ -45,4 +45,4 @@ debug : os-image.bin kernel.elf
 # Other rules
 clean:
 	rm -rf *.bin *.dis *.o os-image.bin *.elf
-	rm -rf kernel/*.o boot/*.bin drivers/*.o boot/*.o
+	rm -rf kernel/*.o drivers/*.o intrpt/*.o boot/*.o boot/*.bin

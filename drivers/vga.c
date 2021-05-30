@@ -4,111 +4,107 @@
 
 #include "vga.h"
 
-// private function declarations
-
-void enable_cursor();
-void disable_cursor();
-unsigned int get_cursor_pos();
-void set_cursor_pos (int, int);
-
 // screen text functions
 
 void clear_screen() {
+  //show_error_mark();
+  //show_warn_mark();
   int pos;
-  for (int x = 0; x < CHAR_WIDTH; ++x) {
-    for (int y = 0; y < CHAR_HEIGHT; ++y) {
-      pos = (y * CHAR_HEIGHT) + x;
-      char* loc = (char*) VIDEO_MEM + (pos * 2);
+  for (uint32_t x = 0; x < CHAR_WIDTH; ++x) {
+    for (uint32_t y = 0; y < CHAR_HEIGHT; ++y) {
+      pos = (y * CHAR_WIDTH) + x;
+      uint8_t* loc = (uint8_t*) VIDEO_MEM + (pos * 2);
       *loc = ' ';
     }
   }
 }
 
 // prints string starting at cursor location, and updates cursor location
-void kprint(char* str) {
-  kprint_at(str, -1 , -1, 1);
+void kprint(char *msg) {
+  kprint_at(msg, -1 , -1, 0, 1);
 }
 
 // prints a string starting at x, y. if either are -1, they are set to the cursor location
-void kprint_at(char* str, int x, int y, int update_cursor_loc) {
+void kprint_at(char *msg, uint32_t x, uint32_t y, uint8_t attr, int update_cursor_loc) {
+  if (!attr) attr = WHITE_ON_BLACK;
+
   if (x == -1 || y == -1) {
-    int pos = get_cursor_pos();
+    uint32_t pos = get_cursor_pos();
     y = pos / CHAR_WIDTH;
     x = pos % CHAR_WIDTH;
   }
 
-  int str_len = sizeof(*str) / sizeof(char);
-
-  for (int i = 0; i < str_len; ++i) {
-    print_char(str[i], x, y, 0); // dont update cursor till string complete
-    x++;
+  uint32_t i = 0;
+  while (msg[i] != '\0') {
+    print_char(msg[i], x + i, y, 0, 0);
+    i++;
   }
 
+
   if (update_cursor_loc) {
-    set_cursor_pos(x, y);
+    set_cursor_pos(x+i, y);
   }
 }
 
 // prints a char at x, y. if either are -1, they are set to the cursor location
-void print_char(char ch, int x, int y, int update_cursor_loc) {
+// if attr == 0, default to white on black
+void print_char(char ch, uint32_t x, uint32_t y, uint8_t attr, int update_cursor_loc) {
   if (x == -1 || y == -1) {
-    int pos = get_cursor_pos();
+    uint32_t pos = get_cursor_pos();
     y = pos / CHAR_WIDTH;
     x = pos % CHAR_WIDTH;
   }
+
+  uint8_t *vid_mem = (uint8_t*) VIDEO_MEM;
+  if (!attr) attr = WHITE_ON_BLACK;
+
+//  // error indicator if x/y out of bounds
+//  if (x >= CHAR_WIDTH || y >= CHAR_HEIGHT) {
+//    //show_error_mark(); todo: re-add
+//    return;
+//  }
 
   if (ch == '\n') {
     y++;
     x = 0;
   }
 
-  int pos = (y * CHAR_HEIGHT) + x;
-  char* loc = (char*) VIDEO_MEM + (pos * 2);
-  *loc = ch;
+  uint32_t pos = ((y * CHAR_WIDTH) + x)*2;
+  vid_mem[pos] = ch;
+  vid_mem[pos + 1] = attr;
 
-  if (update_cursor_loc) {
-    set_cursor_pos(x, y);
-  }
+//  if (update_cursor_loc) {
+//    set_cursor_pos(x, y);
+//  }
 }
 
 // cursor functions
+void set_cursor_pos(uint32_t x, uint32_t y) {
+  uint32_t pos = y * CHAR_WIDTH + x;
 
-void enable_cursor() {
-  // set cursor start to 0
-  port_write_byte(VGA_CTRL_REG, 0x0A); // ie set to edit lower cursor shape register
-  char vga_data_new_val = (port_read_byte(VGA_DATA_REG) & 0xC0) | 0;
-  port_write_byte(VGA_DATA_REG,  vga_data_new_val);
+  port_write_byte(VGA_CTRL_REG, 14);
+  port_write_byte(VGA_DATA_REG, (uint8_t)(pos >> 8)); // write lower pos
 
-  // set cursor end to 15 (max scan line)
-  port_write_byte(VGA_CTRL_REG, 0x0B); // ie set to edit upper??? cursor shape register
-  vga_data_new_val = (port_read_byte(VGA_DATA_REG) & 0xE0) | 15;
-  port_write_byte(VGA_DATA_REG,  vga_data_new_val);
-}
-
-void disable_cursor() {
-  port_write_byte(VGA_CTRL_REG, 0x0A);
-  port_write_byte(VGA_DATA_REG, 0x20); // bit 5 disables cursor, bits 0-4 control cursor shape
+  port_write_byte(VGA_CTRL_REG, 15);
+  port_write_byte(VGA_DATA_REG, (uint8_t)(pos & 0xff)); // write upper pos
 }
 
 // returns y * CHAR_HEIGHT + x
-unsigned int get_cursor_pos() {
-  int pos = 0;
+uint32_t get_cursor_pos() {
+  uint32_t pos = 0;
 
-  port_write_byte(VGA_CTRL_REG, 0x0F);
-  pos |= port_read_byte(VGA_DATA_REG);
+  port_write_byte(VGA_CTRL_REG, 14);
+  pos = port_read_byte(VGA_DATA_REG) << 8; // read high byte
 
-  port_write_byte(VGA_CTRL_REG, 0x0E);
-  pos |= ((int) port_read_byte(VGA_DATA_REG)) << 8;
+  port_write_byte(VGA_CTRL_REG, 15);
+  pos += port_read_byte(VGA_DATA_REG);
 
   return pos;
 }
 
-void set_cursor_pos(int x, int y) {
-  unsigned int pos = y * CHAR_WIDTH + x;
-
-  port_write_byte(VGA_CTRL_REG, 0x0F);
-  port_write_byte(VGA_DATA_REG, (char) (pos & 0xFF)); // write lower pos
-
-  port_write_byte(VGA_CTRL_REG, 0x0E);
-  port_write_byte(VGA_DATA_REG, (char) ((pos >> 8) & 0xFF)); // write upper pos
+void show_error_mark() {
+  print_char('E', 79, 24, RED_ON_WHITE, 0);
+}
+void show_warn_mark() {
+  print_char('W', 78, 24, BLUE_ON_WHITE, 0);
 }
