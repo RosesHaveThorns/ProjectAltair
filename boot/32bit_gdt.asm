@@ -1,7 +1,6 @@
 gdt_start:
-    dd 0x0
-    dd 0x0
-    
+    dd 0x0 ; null segment
+    dd 0x0   
 ; code segment GDT
 gdt_code:
     dw 0xffff       ; segment length (bits 0-15)
@@ -10,7 +9,6 @@ gdt_code:
     db 10011010b    ; flags (8 bits)
     db 11001111b    ; flags (4 bits) + segment length (bits 16-19)
     db 0x0          ; segment base (bits 24-31)
-    
 ; data segment GDT, in same location and size as code segment
 gdt_data:
     dw 0xffff
@@ -19,7 +17,6 @@ gdt_data:
     db 10010010b
     db 11001111b
     db 0x0
-    
 gdt_end:
 
 ; GDT descriptor
@@ -29,4 +26,5 @@ gdt_descriptor:
     
 ; constants
 CODE_SEG equ gdt_code - gdt_start
-DATA_SEG equ gdt_data - gdt_start 
+DATA_SEG equ gdt_data - gdt_start
+

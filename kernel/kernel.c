@@ -1,12 +1,21 @@
 // PROJECT ALTAIR
-// Created by Rose on 19/05/2021
+// Created by Rose Awen Brindle on 19/05/2021
 //
 
-/* This will force us to create a kernel entry function instead of jumping to kernel.c:0x00 */
-void dummy_test_entrypoint() {
-}
+// NOTE: create strings using char str[x] = "foo" format
 
-void main() {
-  char* video_memory = (char*) 0xb8000; // 0xb8000 is video mem address
-  *video_memory = 'X';
+#include "../drivers/vga.h"
+#include "../intrpt/idt.h"
+
+void kernel_main() {
+  init_idt(); // load ISRs
+
+  clear_screen(1);
+
+  //scroll(1, 1);
+
+  //char message[7] = "Rose";
+  //kprint_at(message, 4, 0, 0, 1);
+//  kprint(message);
+//  kprint(message);
 }

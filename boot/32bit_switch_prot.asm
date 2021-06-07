@@ -4,8 +4,9 @@ switch_protmode:
 
     lgdt [gdt_descriptor] ; load gdt through descriptor
     
+    ; disable paging
     mov eax, cr0
-    or eax, 0x01
+    or eax, 0x1	; Disable paging bit & disable 16-bit pmode.
     mov cr0, eax ; set 32-bit mode bit in cr0 register
 
     jmp CODE_SEG:init_protmode ; farjump using different segment
@@ -20,7 +21,10 @@ init_protmode:
     mov fs, ax
     mov gs, ax
     
-    mov ebp, 0x90000 ; move stack to top of the free space
+    mov ebp, 0x9000 ; move stack to top of the free space
     mov esp, ebp
     
+    ;sti
+    
     call BEGIN_PM ; return to main code
+        
