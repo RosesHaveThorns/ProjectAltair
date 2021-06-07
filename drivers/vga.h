@@ -8,6 +8,7 @@
 #include "../drivers/ports.h"
 
 #include <stdint.h>
+#include "../kernel/utils.h"
 
 #define VIDEO_MEM 0xb8000
 
@@ -21,14 +22,16 @@
 #define CHAR_WIDTH 80
 #define CHAR_HEIGHT 25
 
-void clear_screen();
+void clear_screen(int print_line_nums);
 
 void show_error_mark();
 void show_warn_mark();
 
-void kprint(char*);
-void kprint_at(char*, uint32_t , uint32_t, uint8_t, int);
-void print_char(char, uint32_t, uint32_t, uint8_t, int);
+void scroll(int num_lines, int print_line_nums);
+
+void kprint(char* str);
+void kprint_at(char* str, uint32_t x, uint32_t y, uint8_t attr, int set_cur, int print_line_nums);
+void print_char(char ch, uint32_t x, uint32_t y, uint8_t attr, int set_cur);
 
 void enable_cursor();
 void disable_cursor();

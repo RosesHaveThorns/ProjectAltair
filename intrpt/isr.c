@@ -7,7 +7,7 @@
 
 void isr_print(char*, int, int);
 
-char *exception_messages[] = {
+char exception_messages[32][30] = {
     "Division By Zero",
     "Debug",
     "Non Maskable Interrupt",
@@ -59,15 +59,28 @@ void isr_print(char *str, int x, int y) {
   }
 }
 
+void isr_drawbox() {
+  uint8_t *vid_mem = (uint8_t*) 0xb8000;
+
+  for (int y = 10; y < 10+3; ++y) {
+    for (int x = 20; x < 80-23; ++x) {
+      uint32_t pos = ((y * 80) + (x)) * 2;
+      vid_mem[pos + 1] = 0xf1;
+    }
+  }
+}
+
 void isr_handler(registers_t regs) {
+  isr_drawbox();
+
   char s0[19] = "INTERRUPT RECEIVED";
-  kprint_at(s0, 20, 10, BLUE_ON_WHITE, 0);
+  isr_print(s0, 20, 10);
 
   char s1[3];
   int_to_ascii(regs.intrpt_num, s1);
   isr_print(s1, 20, 11);
 
-  isr_print(exception_messages[regs.intrpt_num], 25, 11);
+  isr_print(exception_messages[regs.intrpt_num], 23, 11);
 
   char s2[3];
   int_to_ascii(regs.err_code, s2);

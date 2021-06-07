@@ -24,6 +24,9 @@ kernel.bin : boot/kernel_entry.o ${OBJ}
 run: os-image.bin
 	${QEMU} -fda os-image.bin
 
+clean-run: clean os-image.bin
+	${QEMU} -fda os-image.bin
+
 # Debug rules
 kernel.elf : boot/kernel_entry.o ${OBJ}
 	i386-elf-ld -o $@ -Ttext 0x1000 $^
