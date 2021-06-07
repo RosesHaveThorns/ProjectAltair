@@ -44,7 +44,7 @@ loadkernel:
     call printnl
     
     mov bx, KERNEL_OFFSET ; store kernel in 0x1000
-    mov dh, 8 ; load in kernel data !!! IF ISSUES WITH KERNEL FUNCTIONS NOT RETURNING, INCREASE AMOUNT OF SECTORS LOADED !!!
+    mov dh, 30 ; load in kernel data !!! IF ISSUES WITH KERNEL FUNCTIONS NOT RETURNING, INCREASE AMOUNT OF SECTORS LOADED !!!
     mov dl, [BOOT_DRIVE] ; in case dl has changed
     call diskload ; read kernel and store to KERNEL_OFFSET
     

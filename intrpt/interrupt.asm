@@ -70,215 +70,215 @@ global isr31
 ; divide by zero exception
 isr0:
     cli
-    push byte 0
-    push byte 0
+    push DWORD 0
+    push DWORD 0
     jmp isr_common
 
 ; debug exception
 isr1:
     cli
-    push byte 0
-    push byte 1
+    push DWORD 0
+    push DWORD 1
     jmp isr_common
 
 ; non maskable interrupt exception
 isr2:
     cli
-    push byte 0
-    push byte 2
+    push DWORD 0
+    push DWORD 2
     jmp isr_common
 
 ; int 3 exception
 isr3:
     cli
-    push byte 0
-    push byte 3
+    push DWORD 0
+    push DWORD 3
     jmp isr_common
 
 ; INTO exception
 isr4:
     cli
-    push byte 0
-    push byte 4
+    push DWORD 0
+    push DWORD 4
     jmp isr_common
 
 ; out of bounds exception
 isr5:
     cli
-    push byte 0
-    push byte 5
+    push DWORD 0
+    push DWORD 5
     jmp isr_common
 
 ; invalid opcode exception
 isr6:
     cli
-    push byte 0
-    push byte 6
+    push DWORD 0
+    push DWORD 6
     jmp isr_common
 
 ; coprocessor not available exception
 isr7:
     cli
-    push byte 0
-    push byte 7
+    push DWORD 0
+    push DWORD 7
     jmp isr_common
 
 ; double fault exception (error code already pushed)
 isr8:
     cli
-    push byte 8
+    push DWORD 8
     jmp isr_common
 
 ; coprocessor segment overrun exception
 isr9:
     cli
-    push byte 0
-    push byte 9
+    push DWORD 0
+    push DWORD 9
     jmp isr_common
 
 ; bad TSS exception (error code already pushed)
 isr10:
     cli
-    push byte 10
+    push DWORD 10
     jmp isr_common
 
 ; segment not present exception (error code already pushed)
 isr11:
     cli
-    push byte 11
+    push DWORD 11
     jmp isr_common
 
 ; stack fault exception (error code already pushed)
 isr12:
     cli
-    push byte 12
+    push DWORD 12
     jmp isr_common
 
 ; general protection exception (error code already pushed)
 isr13:
     cli
-    push byte 13
+    push DWORD 13
     jmp isr_common
 
 ; page fault exception (error code already pushed)
 isr14:
     cli
-    push byte 14
+    push DWORD 14
     jmp isr_common
 
 ; reserved exception
 isr15:
     cli
-    push byte 0
-    push byte 15
+    push DWORD 0
+    push DWORD 15
     jmp isr_common
 
 ; floating point exception
 isr16:
     cli
-    push byte 0
-    push byte 16
+    push DWORD 0
+    push DWORD 16
     jmp isr_common
 
 ; alignment check exception (error code already pushed)
 isr17:
     cli
-    push byte 17
+    push DWORD 17
     jmp isr_common
 
 ; machine check exception
 isr18:
     cli
-    push byte 0
-    push byte 18
+    push DWORD 0
+    push DWORD 18
     jmp isr_common
 
-; reserved interrupt
+; SIMD floating point exception
 isr19:
     cli
-    push byte 0
-    push byte 19
+    push DWORD 0
+    push DWORD 19
+    jmp isr_common
+
+; Virtualisation Exception
+isr20:
+    cli
+    push DWORD 0
+    push DWORD 20
     jmp isr_common
 
 ; reserved interrupt
-isr20:
-    cli
-    push byte 0
-    push byte 20
-    jmp isr_common
-
-; reserved interrupt (error code already pushed)
 isr21:
     cli
-    push byte 21
+    push DWORD 0
+    push DWORD 21
     jmp isr_common
 
 ; reserved interrupt
 isr22:
     cli
-    push byte 0
-    push byte 22
+    push DWORD 0
+    push DWORD 22
     jmp isr_common
 
 ; reserved interrupt
 isr23:
     cli
-    push byte 0
-    push byte 23
+    push DWORD 0
+    push DWORD 23
     jmp isr_common
 
 ; reserved interrupt
 isr24:
     cli
-    push byte 0
-    push byte 24
+    push DWORD 0
+    push DWORD 24
     jmp isr_common
 
 ; reserved interrupt
 isr25:
     cli
-    push byte 0
-    push byte 25
+    push DWORD 0
+    push DWORD 25
     jmp isr_common
 
 ; reserved interrupt
 isr26:
     cli
-    push byte 0
-    push byte 26
+    push DWORD 0
+    push DWORD 26
     jmp isr_common
 
 ; reserved interrupt
 isr27:
     cli
-    push byte 0
-    push byte 27
+    push DWORD 0
+    push DWORD 27
     jmp isr_common
 
 ; reserved interrupt
 isr28:
     cli
-    push byte 0
-    push byte 28
+    push DWORD 0
+    push DWORD 28
     jmp isr_common
 
 ; reserved interrupt
 isr29:
     cli
-    push byte 0
-    push byte 29
+    push DWORD 0
+    push DWORD 29
     jmp isr_common
 
-; reserved interrupt
+; security exception (error code already pushed)
 isr30:
     cli
-    push byte 0
-    push byte 30
+    push DWORD 30
     jmp isr_common
 
 ; reserved interrupt
 isr31:
     cli
-    push byte 0
-    push byte 31
+    push DWORD 0
+    push DWORD 31
     jmp isr_common

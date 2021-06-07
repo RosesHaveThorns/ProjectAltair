@@ -16,7 +16,6 @@ char exception_messages[32][30] = {
     "Out of Bounds",
     "Invalid Opcode",
     "No Coprocessor",
-
     "Double Fault",
     "Coprocessor Segment Overrun",
     "Bad TSS",
@@ -24,24 +23,22 @@ char exception_messages[32][30] = {
     "Stack Fault",
     "General Protection Fault",
     "Page Fault",
-    "Unknown Interrupt",
-
-    "Coprocessor Fault",
+    "Reserved",
+    "x87 Floating Point Exception",
     "Alignment Check",
     "Machine Check",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-
-    "Reserved",
+    "SIMD Floating Point Exception",
+    "Virtualization Exception",
+    "Control Protection Exception",
     "Reserved",
     "Reserved",
     "Reserved",
     "Reserved",
     "Reserved",
     "Reserved",
+    "Reserved",
+    "Reserved",
+    "Security Exception",
     "Reserved"
 };
 
@@ -76,13 +73,13 @@ void isr_handler(registers_t regs) {
   char s0[19] = "INTERRUPT RECEIVED";
   isr_print(s0, 20, 10);
 
-  char s1[3];
+  char s1[4] = "   ";
   int_to_ascii(regs.intrpt_num, s1);
   isr_print(s1, 20, 11);
 
   isr_print(exception_messages[regs.intrpt_num], 23, 11);
 
-  char s2[3];
+  char s2[9] = "        ";
   int_to_ascii(regs.err_code, s2);
   isr_print(s2, 20, 12);
 }

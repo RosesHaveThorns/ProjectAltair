@@ -7,10 +7,13 @@
 #include "../drivers/vga.h"
 #include "../intrpt/idt.h"
 
+
 void kernel_main() {
   init_idt(); // load ISRs
 
   clear_screen(1);
+
+  __asm__("int $0xD" : : );
 
   //scroll(1, 1);
 
