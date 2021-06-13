@@ -16,4 +16,4 @@ To use GDB to debug the OS, call 'make debug'.
 
 ### Running the OS
 As of present, the only supported method of running the OS is with QEMU.
-It can be ran using the command 'make run', or by calling 'qemu -lda os-image.bin' after build completion.
+It can be ran using the command 'make run'/'make clean-run' or by calling 'qemu -lda os-image.bin' after build completion.
